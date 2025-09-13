@@ -52,7 +52,7 @@ async def _check_expiring_subscriptions():
                             Subscription.status.in_([SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIAL]),
                             Subscription.end_date >= start_of_day,
                             Subscription.end_date <= end_of_day,
-                            User.is_blocked == False
+                            User.status == 'active'
                         )
                     )
                 )
@@ -114,7 +114,7 @@ async def _disable_expired_subscriptions(session, bot: Bot):
             and_(
                 Subscription.status.in_([SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIAL]),
                 Subscription.end_date < now,
-                User.is_blocked == False
+                User.status == 'active'
             )
         )
     )
@@ -194,14 +194,14 @@ async def _send_broadcast_message(message_id: int):
             
             # Get target users based on audience
             if broadcast.target_audience == "all":
-                user_query = select(User).where(User.is_blocked == False)
+                user_query = select(User).where(User.status == 'active')
             elif broadcast.target_audience == "active":
                 user_query = (
                     select(User)
                     .join(Subscription, User.id == Subscription.user_id)
                     .where(
                         and_(
-                            User.is_blocked == False,
+                            User.status == 'active',
                             Subscription.status.in_([SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIAL])
                         )
                     )
@@ -212,13 +212,13 @@ async def _send_broadcast_message(message_id: int):
                     .join(Subscription, User.id == Subscription.user_id)
                     .where(
                         and_(
-                            User.is_blocked == False,
+                            User.status == 'active',
                             Subscription.status == SubscriptionStatus.EXPIRED
                         )
                     )
                 )
             else:
-                user_query = select(User).where(User.is_blocked == False)
+                user_query = select(User).where(User.status == 'active')
             
             result = await session.execute(user_query)
             users = result.scalars().all()
