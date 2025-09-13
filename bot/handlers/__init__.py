@@ -6,7 +6,10 @@ from . import (
     referral_handler,
     support_handler,
     admin_handler,
-    test_handler
+    test_handler,
+    stats_handler,
+    faq_handler,
+    settings_handler
 )
 
 __all__ = [
@@ -17,5 +20,8 @@ __all__ = [
     "referral_handler",
     "support_handler",
     "admin_handler",
-    "test_handler"
+    "test_handler",
+    "stats_handler",
+    "faq_handler", 
+    "settings_handler"
 ]

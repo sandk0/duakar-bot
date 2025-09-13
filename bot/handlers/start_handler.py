@@ -79,6 +79,18 @@ async def cancel_command(message: Message, state: FSMContext):
     )
 
 
+@router.callback_query(F.data == "main_menu")
+async def main_menu_callback(callback: CallbackQuery):
+    """Handle main menu callback"""
+    await callback.message.edit_text(
+        "📱 **Главное меню**\n\n"
+        "Выберите действие:",
+        reply_markup=get_main_menu_keyboard(),
+        parse_mode="Markdown"
+    )
+    await callback.answer()
+
+
 async def process_referral(user: User, referral_code: str, session: AsyncSession):
     """Process referral code"""
     try:
