@@ -13,6 +13,9 @@ class VPNConfig(Base):
     config_data = Column(Text)
     qr_code_data = Column(Text)
     is_active = Column(Boolean, default=True)
+    protocol = Column(String(20), default='VLESS')
+    traffic_used = Column(BigInteger, default=0)
+    last_connected_at = Column(DateTime(timezone=False))
     created_at = Column(DateTime(timezone=False), server_default=func.current_timestamp())
     updated_at = Column(DateTime(timezone=False), server_default=func.current_timestamp())
     
