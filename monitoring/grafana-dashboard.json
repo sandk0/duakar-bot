@@ -1,0 +1,221 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "VPN Bot Monitoring",
+    "tags": ["vpn", "bot", "telegram"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "System Overview",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up",
+            "legendFormat": "Services Up"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Active Users",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "vpn_active_users_total",
+            "legendFormat": "Active Users"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Payment Statistics",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(payment_successful_total[5m])",
+            "legendFormat": "Successful Payments/sec"
+          },
+          {
+            "expr": "rate(payment_failed_total[5m])",
+            "legendFormat": "Failed Payments/sec"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "VPN Configurations",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "vpn_configs_active_total",
+            "legendFormat": "Active Configs"
+          },
+          {
+            "expr": "rate(vpn_config_created_total[5m])",
+            "legendFormat": "Configs Created/sec"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "System Resources",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+            "legendFormat": "CPU Usage %"
+          },
+          {
+            "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100",
+            "legendFormat": "Memory Usage %"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "Database Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "pg_stat_database_tup_returned",
+            "legendFormat": "Tuples Returned"
+          },
+          {
+            "expr": "pg_stat_database_tup_fetched",
+            "legendFormat": "Tuples Fetched"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 24
+        }
+      },
+      {
+        "id": 7,
+        "title": "Redis Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "redis_commands_processed_total",
+            "legendFormat": "Commands Processed"
+          },
+          {
+            "expr": "redis_connected_clients",
+            "legendFormat": "Connected Clients"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 24
+        }
+      },
+      {
+        "id": 8,
+        "title": "Bot Messages",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(telegram_messages_received_total[5m])",
+            "legendFormat": "Messages Received/sec"
+          },
+          {
+            "expr": "rate(telegram_messages_sent_total[5m])",
+            "legendFormat": "Messages Sent/sec"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        }
+      },
+      {
+        "id": 9,
+        "title": "Revenue",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "revenue_today_total",
+            "legendFormat": "Today's Revenue"
+          },
+          {
+            "expr": "revenue_month_total",
+            "legendFormat": "Month's Revenue"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": 10,
+        "title": "Subscription Status",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "subscription_active_total",
+            "legendFormat": "Active"
+          },
+          {
+            "expr": "subscription_expired_total",
+            "legendFormat": "Expired"
+          },
+          {
+            "expr": "subscription_trial_total",
+            "legendFormat": "Trial"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "10s"
+  }
+}
