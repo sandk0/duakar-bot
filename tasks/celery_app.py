@@ -30,6 +30,7 @@ app.conf.task_routes = {
     'tasks.payments.*': {'queue': 'payments'},
     'tasks.stats.*': {'queue': 'stats'},
     'tasks.backup.*': {'queue': 'backup'},
+    'tasks.marzban_sync.*': {'queue': 'marzban'},
 }
 
 # Periodic tasks schedule
@@ -38,6 +39,18 @@ app.conf.beat_schedule = {
     'check-expiring-subscriptions': {
         'task': 'tasks.notifications.check_expiring_subscriptions',
         'schedule': crontab(minute=0),  # Every hour
+    },
+    
+    # Sync subscriptions from Marzban every 2 hours
+    'sync-subscriptions-from-marzban': {
+        'task': 'tasks.marzban_sync.sync_subscriptions_from_marzban',
+        'schedule': crontab(minute=0, hour='*/2'),  # Every 2 hours
+    },
+    
+    # Sync user status from Marzban every hour
+    'sync-user-status-from-marzban': {
+        'task': 'tasks.marzban_sync.sync_user_status_from_marzban',
+        'schedule': crontab(minute=30),  # Every hour at 30 minutes
     },
     
     # Process failed payments every 6 hours
@@ -50,6 +63,12 @@ app.conf.beat_schedule = {
     'collect-daily-stats': {
         'task': 'tasks.stats.collect_daily_stats',
         'schedule': crontab(minute=0, hour=3),  # Daily at 3 AM
+    },
+    
+    # Cleanup expired Marzban users weekly
+    'cleanup-expired-marzban-users': {
+        'task': 'tasks.marzban_sync.cleanup_expired_marzban_users',
+        'schedule': crontab(minute=0, hour=1, day_of_week=1),  # Weekly on Monday at 1 AM
     },
     
     # Cleanup expired data weekly
@@ -70,6 +89,12 @@ app.conf.beat_schedule = {
         'schedule': crontab(minute='*/30'),  # Every 30 minutes
     },
     
+    # Get Marzban system stats every 15 minutes
+    'get-marzban-system-stats': {
+        'task': 'tasks.marzban_sync.get_marzban_system_stats',
+        'schedule': crontab(minute='*/15'),  # Every 15 minutes
+    },
+    
     # Check server health every 5 minutes
     'check-server-health': {
         'task': 'tasks.stats.check_server_health',
@@ -82,7 +107,8 @@ app.autodiscover_tasks([
     'tasks.notifications',
     'tasks.payments', 
     'tasks.stats',
-    'tasks.backup'
+    'tasks.backup',
+    'tasks.marzban_sync'
 ])
 
 if __name__ == '__main__':
