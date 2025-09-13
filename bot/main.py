@@ -11,7 +11,10 @@ from bot.handlers import (
     config_handler,
     referral_handler,
     support_handler,
-    test_handler
+    test_handler,
+    stats_handler,
+    faq_handler,
+    settings_handler
 )
 from bot.handlers import admin_simple
 from bot.middleware.auth import AuthMiddleware
@@ -115,6 +118,9 @@ async def main():
     dp.include_router(payment_handler.router)
     dp.include_router(referral_handler.router)
     dp.include_router(support_handler.router)
+    dp.include_router(stats_handler.router)
+    dp.include_router(faq_handler.router)
+    dp.include_router(settings_handler.router)
     dp.include_router(admin_simple.router)
     
     # Start polling
